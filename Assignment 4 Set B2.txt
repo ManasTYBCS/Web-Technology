@@ -1,0 +1,14 @@
+Assignment 4 Set B2
+<?php
+$myArray = [1, 2, 3, 4, 5];
+print_r($myArray);
+$searchValue = 3;
+
+$key = array_search($searchValue, $myArray);
+
+if ($key !== false) {
+    echo "<br>Value $searchValue found at index $key<br>";
+} else {
+    echo "<br>Value $searchValue not found in the array<br>";
+}
+?>

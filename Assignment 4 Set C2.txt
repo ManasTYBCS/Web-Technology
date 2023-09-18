@@ -1,0 +1,74 @@
+Assignment 4 Set C2
+<html>
+
+<body bgcolor="pink">
+<form method="post">
+<h2>Enter choice :</h2>
+<input type="radio" name="ch" value=1> Split array into chunks<br>
+<input type="radio" name="ch" value=2> Sort array by values without changing key<br>
+<input type="radio" name="ch" value=3> Filter odd elements from array <br>
+<input type="radio" name="ch" value=4> Merge given two arrays <br>
+<input type="radio" name="ch" value=5> Find intersection of two array <br>
+<input type="radio" name="ch" value=6> Find union of two array <br>
+<input type="radio" name="ch" value=7> Find set difference of two array <br>
+<br>
+
+<input type="submit" value="SUBMIT">  <input type="reset" value="CLEAR">
+
+</body>
+
+</html>
+
+<html>
+<body bgcolor="black">
+
+<?php
+function is_odd($var)
+{
+if($var%2==1)
+return $var;
+}
+                                                                                                                             
+$choice=$_POST['ch'];
+
+        $arr=array('a'=>1,'b'=>2,'c'=>3,'d'=>4,'e'=>5,'f'=>6,'g'=>7,'h'=>8);
+        $arr1=array('l'=>11,'m'=>22,'n'=>33,'o'=>44,'p'=>55,'q'=>66,'r'=>77,'s'=>88);
+        
+        switch($choice)
+        {
+                case 1:
+                       print_r(array_chunk($arr,2));
+				break;
+                case 2:
+                        asort($arr);
+                        echo "Array in ascending order:<br>";
+                        print_r($arr);
+                        arsort($arr);
+                        echo "<br>Array in descending order:<br>";
+                        print_r($arr);
+                        break;
+               case 3:
+                        print_r(array_filter($arr,'is_odd'));
+                        break;
+               
+                case 4:
+                        print_r(array_merge($arr,$arr1));
+                        break;
+                case 5:
+        
+                        print_r(array_intersect($arr,$arr1));
+                        break;
+                case 6:
+                        $union=array_merge($arr,$arr1);
+                        print_r(array_unique($union));
+                        break;
+                case 7:
+                        print_r(array_diff($arr,$arr1));
+                        break;
+        }
+
+        
+?>
+</font>
+</body>
+</html>

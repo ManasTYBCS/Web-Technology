@@ -1,0 +1,38 @@
+Assignment 4 Set C1
+<?php
+	$people = array("Sophia"=>"31","Jacob"=>"41","William"=>"39","Ramesh"=>"40"); 
+	echo"<br>The associative array is:</br>";
+	print_r($people);
+	echo"<br>*Ascending order sort by value:</br>";
+	asort($people);
+	foreach($people as $name=>$age){  
+		echo $name." => ".$age."<br>";
+	}
+?>
+
+<?php
+	$people = array("Sophia"=>"31","Jacob"=>"41","William"=>"39","Ramesh"=>"40"); 
+	echo" <br>*Ascending order sort by Key:</br>";
+	ksort($people);
+	foreach($people as $name=>$age){  
+		echo $name." => ".$age."<br>";
+	}
+?>
+
+<?php
+	$people = array("Sophia"=>"31","Jacob"=>"41","William"=>"39","Ramesh"=>"40"); 
+	echo"<br>*Descending order sorting by Value:</br>";
+	arsort($people);
+	foreach($people as $name=>$age){  
+		echo $name." => ".$age."<br>";
+	}
+?>
+
+<?php
+	$people = array("Sophia"=>"31","Jacob"=>"41","William"=>"39","Ramesh"=>"40"); 
+	echo"<br>*Descending order sorting by Key:</br>";
+	krsort($people);
+	foreach($people as $name=>$age){  
+		echo $name." =>".$age."<br>";
+	}
+?>
