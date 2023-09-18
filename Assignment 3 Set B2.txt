@@ -1,0 +1,60 @@
+Assignment 3 Set B2
+<!DOCTYPE html>
+<html>
+<head>
+    <title>String Operations</title>
+</head>
+<body>
+    <h1>String Operations</h1>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        <label for="inputString">Enter a string:</label>
+        <input type="text" id="inputString" name="inputString"><br><br>
+        
+        <label for="separator">Choose a separator:</label>
+        <select id="separator" name="separator">
+            <option value="#">#</option>
+            <option value="|">|</option>
+            <option value="%">%</option>
+            <option value="@">@</option>
+            <option value="!">!</option>
+            <option value=",">,</option>
+        </select><br><br>
+        
+        <input type="submit" value="Submit">
+    </form>
+    
+    <?php
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $inputString = $_POST["inputString"];
+        $separator = $_POST["separator"];
+        
+        echo "<h2>Results:</h2>";
+        
+        // Split the string into separate words using the given separator
+        $words = explode($separator, $inputString);
+        echo "Split words: " . implode(", ", $words) . "<br><br>";
+        
+        // Replace all occurrences of the separator with a different separator
+        $newSeparator = "*"; // Change this as needed
+        $newString = str_replace($separator, $newSeparator, $inputString);
+        echo "String with replaced separator: " . $newString . "<br><br>";
+        
+        // Find the last word in the given string using strrchr() function
+        //$lastWord = strrchr($inputString, $separator);
+        //if ($lastWord !== false) {
+           // echo "Last word in the string: " . trim($lastWord, $separator);
+       // } else {
+          //  echo "No words found in the string.";
+        //}
+          $lastSeparatorPosition = strrpos($inputString, $separator);
+    if ($lastSeparatorPosition !== false) {
+        $lastWord = substr($inputString, $lastSeparatorPosition + strlen($separator));
+        echo "Last word in the string: " . $lastWord;
+    } else {
+        echo "No words found in the string.";
+    }
+}
+
+ ?>
+</body>
+</html>

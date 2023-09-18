@@ -1,0 +1,52 @@
+Assignment 3 Set B1
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>String Comparison</title>
+</head>
+<body>
+    <h1>String Comparison</h1>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        <label for="string1">Enter the first string:</label>
+        <input type="text" id="string1" name="string1"><br><br>
+        
+        <label for="string2">Enter the second string:</label>
+        <input type="text" id="string2" name="string2"><br><br>
+        
+        <input type="submit" value="Submit">
+    </form>
+    
+    <?php
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $string1 = $_POST["string1"];
+        $string2 = $_POST["string2"];
+        
+        echo "<h2>Results:</h2>";
+        
+        if (strpos($string1, $string2) === 0) {
+            echo "The small string appears at the start of the large string.<br><br>";
+        } else {
+            echo "The small string does not appear at the start of the large string.<br><br>";
+        }
+        
+        $position = strpos($string1, $string2);
+        if ($position !== false) {
+            echo "Position of the small string in the big string: $position<br><br>";
+        } else {
+            echo "The small string was not found in the big string.<br><br>";
+        }
+        
+        $n = 5; // Change n as needed
+        $substring1 = substr($string1, 0, $n);
+        $substring2 = substr($string2, 0, $n);
+        
+        if (strcasecmp($substring1, $substring2) === 0) {
+            echo "First $n characters are the same (case-insensitive) in both strings.<br><br>";
+        } else {
+            echo "First $n characters are different in the two strings.<br><br>";
+        }
+    }
+    ?>
+</body>
+</html>

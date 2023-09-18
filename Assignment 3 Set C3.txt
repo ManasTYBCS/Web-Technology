@@ -1,0 +1,31 @@
+Assignment 3 Set C3
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Validation</title>
+</head>
+<body>
+    <h1>Email Validation</h1>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        <label for="email">Enter an email address:</label>
+        <input type="text" id="email" name="email"><br><br>
+        
+        <input type="submit" value="Check Validity">
+    </form>
+    
+    <?php
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $email = $_POST["email"];
+        
+        echo "<h2>Result:</h2>";
+        
+        // Check validity using regular expressions
+        if (preg_match('/^[a-zA-Z_][a-zA-Z0-9_-]*\.[a-zA-Z0-9_-]*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/', $email)) {
+            echo "Valid email address: $email";
+        } else {
+            echo "Invalid email address: $email";
+        }
+    }
+    ?>
+</body>
+</html>

@@ -1,0 +1,52 @@
+Assignment 3 Set B3
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Greeting Generator</title>
+</head>
+<body>
+    <h1>Greeting Generator</h1>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        
+        
+        <label for="studentName">Enter student name:</label>
+        <input type="text" id="studentName" name="studentName"><br><br>
+        
+        <label for="collegeName">Enter college name:</label>
+        <input type="text" id="collegeName" name="collegeName"><br><br> 
+        
+        <label for="greetingMessage">Enter a greeting message:</label>
+        <input type="text" id="greetingMessage" name="greetingMessage"><br><br>
+        
+        <input type="submit" value="Generate Greeting">
+    </form>
+    
+    <?php
+    function generateGreeting($message, $student, $college) {
+        if (empty($message)) {
+            $message = "Hello";
+        }
+        
+        $greeting = $message;
+        if (!empty($student)) {
+            $greeting .= ", $student";
+        }
+        if (!empty($college)) {
+            $greeting .= " from $college";
+        }
+        
+        return $greeting;
+    }
+    
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $greetingMessage = $_POST["greetingMessage"];
+        $studentName = $_POST["studentName"];
+        $collegeName = $_POST["collegeName"];
+        
+        $result = generateGreeting($greetingMessage, $studentName, $collegeName);
+        echo "<h2>Greeting:</h2>";
+        echo $result;
+    }
+    ?>
+</body>
+</html>
