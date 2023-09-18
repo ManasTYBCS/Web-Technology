@@ -1,0 +1,118 @@
+Assignment 5 Set C2
+<!--Assignment-5 Set-C Q2-->
+
+<?php
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "property_db";  // Database name
+
+$conn = new mysqli($servername, $username, $password);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Create the database if not exists
+if (!$conn->query("CREATE DATABASE IF NOT EXISTS $database")) {
+    die("Error creating database: " . $conn->error);
+}
+$conn->select_db($database);
+
+// Drop tables to ensure a clean slate
+$conn->query("DROP TABLE IF EXISTS Property");
+$conn->query("DROP TABLE IF EXISTS Owner");
+
+// Create the Owner table
+$conn->query("
+    CREATE TABLE Owner (
+        owner_id INT AUTO_INCREMENT PRIMARY KEY,
+        oname VARCHAR(255) NOT NULL,
+        address VARCHAR(255) NOT NULL,
+        phone VARCHAR(15) NOT NULL
+    );
+");
+
+$conn->query("
+    INSERT INTO Owner (oname, address, phone) VALUES 
+    ('Shashank', '123 Elm St, Springfield', '123-456-7890'),
+    ('Shyam', '456 Oak St, Shelbyville', '987-654-3210'),
+    ('Digvijay', '789 Pine St, Capital City', '456-789-0123'),
+    ('Nishidh', '012 Maple St, Ogdenville', '321-654-9870'),
+    ('Raj', '345 Cedar St, North Haverbrook', '789-012-3456');
+");
+
+// Create the Property table
+$conn->query("
+    CREATE TABLE Property (
+        pno INT AUTO_INCREMENT PRIMARY KEY,
+        description TEXT NOT NULL,
+        area FLOAT NOT NULL,
+        owner_id INT,
+        FOREIGN KEY (owner_id) REFERENCES Owner(owner_id)
+    );
+");
+
+$conn->query("
+    INSERT INTO Property (description, area, owner_id) VALUES 
+    ('Beautiful villa with garden', 250.5, 1),
+    ('City center apartment', 85.5, 1),
+    ('Hillside retreat property', 280.8, 1),
+    ('Modern apartment in city center', 75.2, 4),
+    ('Riverside apartment', 110.3, 2),
+    ('Countryside farmhouse', 300.0, 3),
+    ('Beachfront property', 200.7, 4),
+    ('Penthouse with city view', 80.3, 5);
+");
+
+$message = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['oname'])) {
+    $oname = $_POST['oname'];
+
+    $sql = "
+        SELECT Property.description, Property.area 
+        FROM Property 
+        JOIN Owner ON Property.owner_id = Owner.owner_id 
+        WHERE Owner.oname = ?
+    ";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('s', $oname);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $message .= "Description: " . $row["description"] . ", Area: " . $row["area"] . "<br>";
+        }
+    } else {
+        $message = "No properties found for the given owner.";
+    }
+    $stmt->close();
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Properties by Owner</title>
+</head>
+<body>
+
+<form action="" method="post">
+    Enter Owner's Name: <input type="text" name="oname" required>
+    <input type="submit" value="Find Properties">
+</form>
+
+<?php
+if (!empty($message)) {
+    echo "<p>$message</p>";
+}
+?>
+
+</body>
+</html>

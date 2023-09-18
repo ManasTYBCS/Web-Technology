@@ -1,0 +1,62 @@
+<?php
+
+$filename = "item.dat";
+
+// Sample data for the item.dat file
+$sampleData = "101, Laptop, 5, 1000
+102, Mouse, 10, 20
+103, Keyboard, 7, 50
+104, Monitor, 3, 150
+105, Speaker, 6, 45";
+
+// Create and populate the file if it doesn't exist
+if (!file_exists($filename)) {
+    file_put_contents($filename, $sampleData);
+}
+
+// Open file for reading
+$file = fopen($filename, "r");
+
+// Initialize total amount
+$totalAmount = 0;
+
+// Start outputting the table
+echo "<table border='1'>";
+
+// Output the heading row within the table
+echo "<tr><th colspan='5'>PRAKASH STORE INVOICE</th></tr>";
+echo "<tr><th>Item Code</th><th>Item Name</th><th>Units Sold</th><th>Rate</th><th>Amount</th></tr>";
+
+// Read each line
+while (!feof($file)) {
+    $line = trim(fgets($file));  // Get one line
+    if ($line == "") continue;  // Skip empty lines
+
+    $parts = explode(",", $line);  // Split line into parts
+
+    $itemCode = trim($parts[0]);
+    $itemName = trim($parts[1]);
+    $unitsSold = intval(trim($parts[2]));
+    $rate = floatval(trim($parts[3]));
+
+    $amount = $unitsSold * $rate;
+    $totalAmount += $amount;
+
+    // Output table row
+    echo "<tr>";
+    echo "<td>{$itemCode}</td>";
+    echo "<td>{$itemName}</td>";
+    echo "<td>{$unitsSold}</td>";
+    echo "<td>{$rate}</td>";
+    echo "<td>{$amount}</td>";
+    echo "</tr>";
+}
+
+// Output total amount
+echo "<tr><td colspan='4'>Total Amount</td><td>{$totalAmount}</td></tr>";
+
+echo "</table>";
+
+fclose($file);
+
+?>

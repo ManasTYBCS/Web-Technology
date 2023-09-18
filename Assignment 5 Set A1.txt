@@ -1,0 +1,19 @@
+Assignment 5 Set  A1
+<?php
+$file_path = 'example.txt'; // Replace 'example.txt' with the path to your file
+
+if (file_exists($file_path)) {
+    $file_contents = file_get_contents($file_path);
+    $file_size = filesize($file_path);
+
+    if ($file_contents === false) {
+        echo "Error reading the file.";
+    } else {
+        echo "File Contents:<br>";
+        echo nl2br($file_contents) . "<br><br>";
+        echo "File Size: " . $file_size . " bytes<br>";
+    }
+} else {
+    echo "The file does not exist.";
+}
+?>

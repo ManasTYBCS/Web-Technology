@@ -1,0 +1,73 @@
+Assignment 5 Set B2
+<!--Assignment-5 Set-B Q2-->
+
+<?php
+
+$servername = "localhost";
+$username = "root"; 
+$password = ""; 
+$database = "competition_db";
+
+$conn = new mysqli($servername, $username, $password);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$conn->query("CREATE DATABASE IF NOT EXISTS $database");
+$conn->select_db($database);
+
+// Check and create tables if they don't exist
+if (!$conn->query("SHOW TABLES LIKE 'Student'")->num_rows) {
+    $conn->query("CREATE TABLE Student (Stud_id INT PRIMARY KEY, name VARCHAR(255), class VARCHAR(255))");
+    $conn->query("INSERT INTO Student VALUES (1, 'Alice', '10A'), (2, 'Bob', '10B'), (3, 'Charlie', '10C')");
+}
+
+if (!$conn->query("SHOW TABLES LIKE 'Competition'")->num_rows) {
+    $conn->query("CREATE TABLE Competition (c_no INT PRIMARY KEY, c_name VARCHAR(255), type VARCHAR(255))");
+    $conn->query("INSERT INTO Competition VALUES (1, 'Math challenge', 'Academic'), (2, 'Coding Challenge', 'Technical'), (3, 'Art Contest', 'Creative')");
+}
+
+if (!$conn->query("SHOW TABLES LIKE 'StudentCompetition'")->num_rows) {
+    $conn->query("CREATE TABLE StudentCompetition (Stud_id INT, c_no INT, rank INT, year INT, PRIMARY KEY(Stud_id, c_no))");
+    $conn->query("INSERT INTO StudentCompetition VALUES (1, 1, 1, 2023), (2, 2, 1, 2023), (3, 3, 1, 2023)");
+}
+
+// Fetch 1st rank based on competition name
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['c_name'])) {
+    $c_name = $_POST['c_name'];
+
+    $sql = "
+        SELECT Student.name, Student.class
+        FROM Student
+        JOIN StudentCompetition ON Student.Stud_id = StudentCompetition.Stud_id
+        JOIN Competition ON StudentCompetition.c_no = Competition.c_no
+        WHERE Competition.c_name = ? AND StudentCompetition.rank = 1
+    ";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('s', $c_name);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "Student Name: " . $row["name"] . "<br>";
+            echo "Class: " . $row["class"] . "<br>";
+        }
+    } else {
+        echo "No student secured 1st rank in the given competition.";
+    }
+    $stmt->close();
+} else {
+    echo '
+    <form action="" method="post">
+        Competition Name: <input type="text" name="c_name">
+        <input type="submit" value="Find 1st Rank">
+    </form>
+    ';
+}
+
+$conn->close();
+
+?>
